@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gestión de Insumos. Electrotecnia Luxel Ltda.</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+
+
+  <%= javascript_include_tag "jquery-1.4.2.min", "rails", "highcharts" %>   
+  
+
+</head>
+<body>
+
+<div class="navbar-inner">
+  <center><h1>Electrotecnia Luxel Ltda.</h1></center>  
+  <div class="offset2"><% if usuario_signed_in? %>
+      Sesión iniciada como:  <%= current_usuario.email %>.
+    <div class="btn btn-danger"><%= link_to "Cerrar Sesión", destroy_usuario_session_path, :method => :delete %></div></div></div>
+  <% else %>
+    <div class="btn btn-info"><%= link_to "Iniciar Sesión", new_usuario_session_path %></div>
+  <% end %>
+</div>
+
+<div class="container">
+
+  <% if usuario_signed_in? %>
+    <div class="navbar ">
+      <div class="navbar-inner">
+        <div class="container">
+          
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li id="servicios" >
+                <%= link_to "Servicios", servicios_path %>
+              </li>
+              <li id="insumos" class="">
+                <%= link_to "Insumos", insumos_path %>
+              </li>
+              <li id="clientes" class="">
+                <%= link_to "Clientes", clientes_path %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  <% end %>
+
+<%= yield %>
+
+
+  
+
+</div>
+</body>
+</html>

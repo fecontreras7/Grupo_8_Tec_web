@@ -1,0 +1,8 @@
+<center><h2>Editar Cliente: <%= @cliente.nombre %></h2></center>
+<br/>
+<div class="offset4">
+	<%= render 'form' %>
+	<div class="btn btn-info"> <%= link_to 'Ver', @cliente %> </div>
+	<div class="btn btn-danger"> <%= link_to 'Volver', clientes_path %> </div>
+</div>
+

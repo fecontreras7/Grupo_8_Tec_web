@@ -1,0 +1,64 @@
+<%= form_for(@servicio) do |f| %>
+  <% if @servicio.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@servicio.errors.count, "error") %> prohibited this servicio from being saved:</h2>
+
+      <ul>
+      <% @servicio.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :nombre %><br />
+    <%= f.text_field :nombre %>
+  </div>
+
+
+  
+  <label>Cliente</label>
+  <br />
+  <% array_clientes = Cliente.all.map { |cliente| [cliente.nombre, cliente.id]  } %>
+    <% if @servicio.cliente_id.nil? %>
+      <%= f.select(:cliente_id, array_clientes, :selected => :prompt, :prompt => '[Seleccionar Cliente]') %>
+    <% else %>
+      <%= f.select(:cliente_id, array_clientes) %>
+  <% end %>
+  
+  <div class="field">
+    <%= f.label :precio %><br />
+    <%= f.number_field :precio %>
+  </div>
+  <div class="field">
+    <%= f.label :fecha %><br />
+    <%= f.date_select :fecha %>
+  </div>
+
+
+<h2>Insumos asociados</h2>
+<table class="table table-bordered">
+  <tr>
+    <th>Nombre</th>
+    <th>Costo</th>
+  </tr>
+
+    <!--Insumo.find(params[:id]) -->
+<% ganancias = @servicio.precio %>
+<% for insumo in @servicio.insumos %>
+  <tr>
+    <td><%= insumo.nombre %></td>
+    <td><%= insumo.costo %></td>
+    <% ganancias = ganancias - insumo.costo %>
+  </tr>
+<% end %>
+</table>
+
+<h3>Ganancias: $ <%=  ganancias %> </h3>
+
+  <div class="btn">
+    <%= f.submit :Aceptar %>
+  </div>
+
+<% end %>

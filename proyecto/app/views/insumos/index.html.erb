@@ -1,0 +1,76 @@
+
+<script type="text/javascript">
+  $(function () {  
+
+    array_insumos = nombres_insumos();
+    //<%= Servicio.all.map { |servicio| [servicio.precio] } %>
+    new Highcharts.Chart({  
+      chart: { renderTo: 'contenedor_lista_de_insumos', type: 'column' },
+      title: { text: 'Insumos' },  
+      xAxis: { 
+          categories: array_insumos
+      },  
+      yAxis: {
+        allowDecimals: false,  
+        title: { text: 'Miles de Pesos' }
+      },
+      series: [{
+        name: "Precio", 
+        data: <%= Insumo.all.map { |insumo| [insumo.costo] } %>
+        
+      }] 
+    });  
+  });
+
+  function nombres_insumos() {
+    index_nombres = 0;
+    var array_nombres = [];
+    
+    $("#lista_de_insumos tr td").each( function(index) {
+      if ( index-index_nombres === 0) {
+        index_nombres = index_nombres + 4;
+        array_nombres.push( $(this).text() );
+      }
+    });
+
+    return array_nombres; 
+  }
+</script>
+
+
+<center><h1>Gráfico de Insumos<h1/></center>
+<br />
+<div id="contenedor_lista_de_insumos" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+
+
+<center><h1>Listado de insumos</h1></center>
+
+
+<div class="btn btn-success"><%= link_to 'Agregar Insumo', new_insumo_path %></div>
+<table id="lista_de_insumos" class="table table-bordered">
+  <tr>
+    <th>Nombre</th>
+    <th>Servicio asociado</th>
+    <th>Costo</th>
+    <th>Acciones</th>
+  </tr>
+
+<% @insumos.each do |insumo| %>
+  
+    <tr>
+      <td><%= insumo.nombre %></td>
+      <td><%= Servicio.find(insumo.servicio_id).nombre %></td>
+      <td><%= insumo.costo %></td>
+      <td><div class="btn btn-info"><%= link_to 'Ver', insumo %></div>
+          <div class="btn btn-primary"><%= link_to 'Editar', edit_insumo_path(insumo) %></div>
+          <div class="btn btn-danger"><%= link_to 'Eliminar', insumo, method: :delete, data: { confirm: 'Está seguro que desea eliminar estos datos?' } %></div>
+      </td>
+    </tr>
+  
+<% end %>
+</table>
+
+<br />
+
+

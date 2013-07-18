@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+<center><h1>Detalle Servicio</h1></center>
+<p>
+  <b>Nombre:</b>
+  <%= @servicio.nombre %>
+</p>
+
+<p>
+  <b>Cliente:</b>
+  <%= Cliente.find(@servicio.cliente_id).nombre %>
+</p>
+
+<p>
+  <b>Precio:</b>
+  <%= @servicio.precio %>
+</p>
+
+<p>
+  <b>Fecha:</b>
+  <%= @servicio.fecha %>
+</p>
+
+<h2>Insumos asociados</h2>
+<table class="table table-bordered">
+  <tr>
+    <th>Nombre</th>
+    <th>Costo</th>
+  </tr>
+
+    <!--Insumo.find(params[:id]) -->
+<% ganancias = @servicio.precio %>
+<% for insumo in @servicio.insumos %>
+  <tr>
+    <td><%= insumo.nombre %></td>
+    <td><%= insumo.costo %></td>
+    <% ganancias = ganancias - insumo.costo %>
+  </tr>
+<% end %>
+</table>
+
+<h3>Ganancias: $ <%=  ganancias %> </h3>
+
+<div class="btn btn-primary"><%= link_to 'Editar', edit_servicio_path(@servicio) %> </div>
+<div class="btn btn-danger"><%= link_to 'Cancelar', servicios_path %></div>

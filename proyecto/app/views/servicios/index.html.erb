@@ -1,0 +1,121 @@
+<% if usuario_signed_in? %>
+  
+<script type="text/javascript" charset="utf-8">
+
+  $(function () {  
+
+    var array_insumos = insumos_servicio();
+    var array_ganancias = ganancias_servicio();
+    var array_nombres = nombres_servicios();
+    //<%= Servicio.all.map { |servicio| [servicio.precio] } %>
+    new Highcharts.Chart({  
+      chart: { renderTo: 'contenedor_lista_de_servicios', type: 'column' },
+      title: { text: 'Servicios' },  
+      xAxis: { 
+          categories: array_nombres
+      },  
+      yAxis: {
+        allowDecimals: false,  
+        title: { text: 'Miles de Pesos' }
+      },
+      series: [{
+        name: "Ganancias",
+        data: array_ganancias
+      }, {
+        name: "Insumos",
+        data: array_insumos, 
+        color: '#D70000' 
+      }, {
+        name: "Precio", 
+        data: <%= Servicio.all.map { |servicio| [servicio.precio] } %>
+      }] 
+    });  
+  });  
+
+  function insumos_servicio() {
+    var array_insumos = [];
+    index_insumos = 4;
+    $("#lista_de_servicios tr td").each( function(index) {
+      if ( index-index_insumos === 0) {
+        index_insumos = index_insumos+7;
+        array_insumos.push( parseInt($(this).text()) );
+      }
+    });
+    return array_insumos;
+  }
+
+  function ganancias_servicio() {
+    index_ganancias = 3;
+    var array_ganancias = [];
+    
+      $("#lista_de_servicios tr td").each( function(index) {
+        if ( index-index_ganancias === 0) {
+          index_ganancias = index_ganancias+7;
+          array_ganancias.push( parseInt( $(this).text() ));
+        }
+      });
+
+    return array_ganancias;
+  }
+
+  function nombres_servicios() {
+    index_nombres = 0;
+    var array_nombres = [];
+    
+    $("#lista_de_servicios tr td").each( function(index) {
+      if ( index-index_nombres === 0) {
+        index_nombres = index_nombres + 7;
+        array_nombres.push( $(this).text() );
+      }
+    });
+
+    return array_nombres; 
+  }
+
+</script>  
+
+<center><h1 id="titulo">Gráfico de Ganancias<h1/></center>
+<br />
+<div id="contenedor_lista_de_servicios" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+<center><h1 id="titulo">Lista de Servicios</h1></center>
+<div class="btn btn-success"><%= link_to 'Agregar Servicio', new_servicio_path %></div>  
+  <table id="lista_de_servicios" class="table table-bordered">
+    <tr>
+      <th>Nombre</th>
+      <th>Cliente</th>
+      <th>Precio</th>
+      <th id="valores_insumo">Total Ganancias</th>
+      <th>Total Insumos</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+      <% @servicios.each do |servicio| %>
+        <tr>
+          <td><%= servicio.nombre %></td>
+          <td><%=  Cliente.find(servicio.cliente_id).nombre %></td>
+          <td><%= servicio.precio %></td>
+          <td>
+            <% ganancias = servicio.precio %>
+            <% total_gastos = 0 %>
+            <% for insumo in servicio.insumos %>
+              <% ganancias = ganancias - insumo.costo %>
+              <% total_gastos = total_gastos + insumo.costo %>
+            <% end %>
+            <%= ganancias %>
+          </td>
+          <td>
+            <%= total_gastos %>
+          </td>
+          <td><%= servicio.fecha %></td>
+          <td><div class="btn btn-info"><%= link_to 'Ver', servicio %></div>
+              <div class="btn btn-primary"><%= link_to 'Editar', edit_servicio_path(servicio) %></div>
+              <div class="btn btn-danger"><%= link_to 'Eliminar', servicio, method: :delete, data: { confirm: '¿Está seguro que desea eliminar estos datos?' } %></div>
+          </td>
+        </tr>
+      <% end %>
+  
+  </table>
+
+<br />
+<% end %>

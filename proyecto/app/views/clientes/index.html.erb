@@ -1,0 +1,29 @@
+<center><h1>Lista de Clientes</h1></center>
+
+<div class="btn btn-success"><%= link_to 'Agregar Cliente', new_cliente_path %></div>
+<table class="table table-bordered">
+  <tr>
+    <th>Nombre</th>
+    <th>Rut</th>
+    <th>Direccion</th>
+    <th>Telefono</th>
+    <th>Acciones</th>
+  </tr>
+
+<% @clientes.each do |cliente| %>
+  <tr>
+    <td><%= cliente.nombre %></td>
+    <td><%= cliente.rut %></td>
+    <td><%= cliente.direccion %></td>
+    <td><%= cliente.telefono %></td>
+    <td>
+      <div class="btn btn-info"><%= link_to 'Ver', cliente %></div>
+      <div class="btn btn-primary"><%= link_to 'Editar', edit_cliente_path(cliente) %></div>
+    </td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+
